@@ -1,0 +1,65 @@
+package com.sb.service;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.kafka.common.TopicPartition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.listener.ConsumerSeekAware;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.stereotype.Service;
+import org.springframework.kafka.support.KafkaHeaders;
+import com.sb.entities.Customer;
+
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
+
+@Service
+@Log4j2
+public class KafkaConsume implements ConsumerSeekAware
+{
+	
+	private final Logger logger=LoggerFactory.getLogger(KafkaConsume.class);
+	
+	
+	@KafkaListener(topics ="myTopicName",groupId ="group_id")
+	public void consume(String message,  @Header(KafkaHeaders.RECEIVED_PARTITION_ID) Integer partition,
+            							 @Header(KafkaHeaders.OFFSET) Long offset)
+	{
+		
+		logger.info("consumed message :  "+message);
+		logger.info("Partition: "+ partition);
+		logger.info("Offset: " +offset);
+	}
+
+	@KafkaListener(topics ="testKafkaTopic",groupId ="group_json",containerFactory ="customerKafkaListenerContainerFactory")
+	public void consumeJson(Customer customer,  @Header(KafkaHeaders.RECEIVED_PARTITION_ID) Integer partition,
+												@Header(KafkaHeaders.OFFSET) Long offset
+												)
+	{
+		logger.info("Consumed Json :  "+customer);
+		logger.info("Partition: "+ partition);
+		logger.info("Offset: " +offset);
+	}
+
+	@Override
+	public void registerSeekCallback(ConsumerSeekCallback callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPartitionsAssigned(Map<TopicPartition, Long> assignments, ConsumerSeekCallback callback) {
+		assignments.keySet().forEach(partition -> callback.seek(partition.topic(), partition.partition(), 3L));
+		
+	}
+
+	@Override
+	public void onIdleContainer(Map<TopicPartition, Long> assignments, ConsumerSeekCallback callback) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}

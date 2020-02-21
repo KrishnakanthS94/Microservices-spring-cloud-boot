@@ -1,0 +1,5 @@
+package com.krrish.microservices.config;
+
+public class Configuration {
+
+}

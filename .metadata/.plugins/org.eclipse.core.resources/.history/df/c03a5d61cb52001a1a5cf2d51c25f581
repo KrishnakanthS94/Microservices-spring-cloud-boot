@@ -1,0 +1,5 @@
+package com.krrish.microservices.bean;
+
+public class CurrencyConversionBean {
+
+}

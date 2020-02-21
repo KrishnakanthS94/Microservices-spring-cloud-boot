@@ -1,0 +1,18 @@
+package com.krrish.microservices.bean;
+
+import java.math.BigDecimal;
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+
+public class CurrencyConversionBean {
+	private String from;
+	private String to;
+	private BigDecimal converisonMultiple;
+	private Long id;
+	private BigDecimal quantity;
+	private BigDecimal totalAmount;
+	private String port;
+	
+
+}

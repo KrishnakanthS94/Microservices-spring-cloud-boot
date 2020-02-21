@@ -1,0 +1,27 @@
+package com.krrish.microservices.Controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.krrish.microservices.bean.ExchangeValue;
+import com.krrish.microservices.repository.CurrencyExchangeRepository;
+
+@RestController
+
+public class CurrencyExchnageController {
+	
+	@Autowired
+	private CurrencyExchangeRepository repository;
+	
+	@GetMapping("cuurency-exchange/from/{from}/to/{to}")
+	public ExchangeValue retrieveExchange(@PathVariable("from") String from,@PathVariable("to") String to)
+	{
+		//return new ExchangeValue("USD", "INR", BigDecimal.valueOf(70), 1000L);
+		
+		return repository.findByFromAndTo(from, to);
+		
+	}
+
+}
